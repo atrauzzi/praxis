@@ -6,5 +6,8 @@ services:
     build: ./Praxis
     container_name: praxis-cli
 
+    environment:
+      - NUGET_PACKAGES=./vendor
+
     volumes:
       - "./Praxis:/praxis"

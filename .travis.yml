@@ -4,7 +4,7 @@ services:
   - docker
 
 install:
-  - docker-compose run --rm praxis-cli dotnet restore --packages ./vendor
+  - docker-compose run --rm praxis-cli dotnet restore
 
 script:
   - docker-compose run --rm praxis-cli dotnet pack
