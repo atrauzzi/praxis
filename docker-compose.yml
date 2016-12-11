@@ -10,4 +10,4 @@ services:
       - NUGET_PACKAGES=./vendor
 
     volumes:
-      - "./Praxis:/praxis"
+      - "./Praxis:/Praxis"
