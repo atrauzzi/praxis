@@ -1,0 +1,10 @@
+version: '2'
+
+services:
+
+  praxis-cli:
+    build: ./Praxis
+    container_name: praxis-cli
+
+    volumes:
+      - "./Praxis:/praxis"

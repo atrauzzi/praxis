@@ -1,0 +1,10 @@
+sudo: required
+
+services:
+  - docker
+
+install:
+  - docker-compose run --rm praxis-cli dotnet restore --packages ./vendor
+
+script:
+  - docker-compose run --rm praxis-cli dotnet pack
