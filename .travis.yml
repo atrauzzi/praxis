@@ -3,8 +3,15 @@ sudo: required
 services:
   - docker
 
+branches:
+  only:
+  - master
+
 install:
   - docker-compose run --rm praxis-cli dotnet restore
 
 script:
   - docker-compose run --rm praxis-cli dotnet pack
+
+after_success:
+  - publish.sh
