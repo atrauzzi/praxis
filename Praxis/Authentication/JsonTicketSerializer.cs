@@ -99,7 +99,7 @@ namespace Praxis.Authentication
 
         private AuthenticationProperties DeserializeProperties(JToken data)
         {
-            return new AuthenticationProperties(data.SelectToken("properties").Value<JObject>().Properties().ToDictionary(
+            return new AuthenticationProperties(data.SelectToken("properties")?.Value<JObject>()?.Properties()?.ToDictionary(
                 propertyJson => propertyJson.Name,
                 propertyJson => propertyJson.Value.Value<string>()
             ));

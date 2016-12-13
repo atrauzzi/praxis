@@ -109,10 +109,9 @@ namespace Praxis.Session.Json {
         {
             Load();
 
-            JToken encodedValue;
+            try {
+                JToken encodedValue;
 
-            try
-            {
                 if (_store.TryGetValue(key, out encodedValue))
                 {
                     value = Encoding.UTF8.GetBytes(encodedValue.ToString());
@@ -153,7 +152,7 @@ namespace Praxis.Session.Json {
                     Buffer.BlockCopy(value, 0, copy, 0, value.Length);
                     valueJson = JObject.FromObject(value);
                 }
-                
+
                 _store.Add(key, valueJson);
                 _isModified = true;
             }
@@ -182,17 +181,18 @@ namespace Praxis.Session.Json {
 
                     if (data != null)
                     {
-                        _store = JObject.Parse(data) ?? new JObject();
+                        _store = JObject.Parse(data);
                     }
                     else if (!_isNewSessionKey)
                     {
+                        _store = new JObject();
                         _logger.AccessingExpiredSession(_sessionKey);
                     }
-                    else
+                    else 
                     {
                         _store = new JObject();
                     }
-                    
+
                     _isAvailable = true;
                 }
                 catch (Exception exception)
