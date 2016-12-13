@@ -22,12 +22,12 @@ namespace Praxis.Authentication
         {
             var key = Guid.NewGuid().ToString();
             _httpContextAccessor.HttpContext.Session.Set($"identity-{key}", _ticketSerializer.Serialize(ticket));
-            return key;
+            return await Task.FromResult(key);
         }
 
         public async Task RenewAsync(string key, AuthenticationTicket ticket)
         {
-            // I'm good.
+            await Task.CompletedTask;
         }
 
         public async Task<AuthenticationTicket> RetrieveAsync(string key)
@@ -36,7 +36,7 @@ namespace Praxis.Authentication
 
             if (serializedTicket != null)
             {
-                return _ticketSerializer.Deserialize(serializedTicket);
+                return await Task.FromResult(_ticketSerializer.Deserialize(serializedTicket));
             }
 
             return null;
@@ -45,6 +45,8 @@ namespace Praxis.Authentication
         public async Task RemoveAsync(string key)
         {
             _httpContextAccessor.HttpContext.Session.Remove(key);
+
+            await Task.CompletedTask;
         }
     }
 }
