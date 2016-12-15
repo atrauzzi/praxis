@@ -4,7 +4,8 @@
     "Microsoft.AspNetCore.Routing": "1.1.0",
     "Microsoft.AspnetCore.Session": "1.1.0",
     "System.Dynamic.Runtime": "4.3.0",
-    "Newtonsoft.Json": "8.0.3"
+    "Newtonsoft.Json": "8.0.3",
+    "Scrypt.NET": "1.1.0"
   },
 
   "frameworks": {

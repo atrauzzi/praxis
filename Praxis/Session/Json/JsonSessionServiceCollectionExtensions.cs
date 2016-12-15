@@ -15,7 +15,7 @@ namespace Praxis.Session.Json
             }
 
             services.AddTransient<ISessionStore, DistributedJsonSessionStore>();
-            services.AddDataProtection();
+
             return services;
         }
 
