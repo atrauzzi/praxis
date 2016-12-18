@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Configuration;
 using Flurl.Http;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -18,18 +20,24 @@ namespace Praxis.TagHelper
 
         private static IDictionary<string, string> _manifest;
 
-        private static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings {
-            Error = null,
-        };
-
         private string StaticHost { get; }
 
         private string AssetPrefix => $"{StaticHost}/{AssetPath}";
 
         private string ManifestUri => $"{AssetPrefix}/{ManifestFile}";
 
-        public Suite(IConfiguration configuration)
+        public Suite(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
+            var httpContext = httpContextAccessor.HttpContext;
+            var requestId = httpContext.TraceIdentifier;
+
+            if (httpContext.Items.ContainsKey(requestId))
+            {
+                throw new Exception("A suite has already been rendered for this page.");
+            }
+
+            httpContext.Items.Add(requestId, true);
+
             StaticHost = configuration.GetSection("StaticHost").Value;
         }
 
@@ -75,7 +83,7 @@ namespace Praxis.TagHelper
                     var manifestJson = await manifestResponse.Content.ReadAsStringAsync();
 
                     _manifest = JsonConvert
-                        .DeserializeObject<JObject>(manifestJson, JsonSettings)?
+                        .DeserializeObject<JObject>(manifestJson)?
                         .Properties()?
                         .ToDictionary(
                             p => p.Name,
