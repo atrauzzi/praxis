@@ -29,14 +29,14 @@ namespace Praxis.TagHelper
         public Suite(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             var httpContext = httpContextAccessor.HttpContext;
-            var requestId = httpContext.TraceIdentifier;
+            var suiteKey = $"suite-{httpContext.TraceIdentifier}";
 
-            if (httpContext.Items.ContainsKey(requestId))
+            if (httpContext.Items.ContainsKey(suiteKey))
             {
                 throw new Exception("A suite has already been rendered for this page.");
             }
 
-            httpContext.Items.Add(requestId, true);
+            httpContext.Items.Add(suiteKey, null);
 
             StaticHost = configuration.GetSection("StaticHost").Value;
         }
