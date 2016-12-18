@@ -36,21 +36,20 @@ namespace Praxis.TagHelper
                 .FirstOrDefault(a => a.Name == "name")
                 .Value as string;
 
-            var jsFile = $"{AssetPrefix}/{suiteName}.js";
-            var cssFile = $"{AssetPrefix}/{suiteName}.css";
-
-            var versionedJsFile = _manifest[jsFile] ?? jsFile;
-            var versionedCssFile = _manifest[cssFile] ?? cssFile;
-
-            var jsUri = $"{AssetPrefix}/{versionedJsFile}";
-            var cssUri = $"{AssetPrefix}/{versionedCssFile}";
-
             output.TagName = "script";
             output.Attributes.Add("type", "text/javascript");
-            output.Attributes.Add("src", jsUri);
+            output.Attributes.Add("src", GetVersionedUri(suiteName, ".js"));
             output.TagMode = TagMode.StartTagAndEndTag;
 
-            output.PostElement.AppendHtml($@"<link rel=""stylesheet"" type=""text/css"" href=""{cssUri}"" />");
+            output.PostElement.AppendHtml($@"<link rel=""stylesheet"" type=""text/css"" href=""{GetVersionedUri(suiteName, "css")}"" />");
+        }
+
+        private string GetVersionedUri(string suiteName, string extension)
+        {
+            var file = $"{AssetPrefix}/{suiteName}.{extension}";
+            var versionedFile = _manifest[file] ?? file;
+
+            return $"{AssetPrefix}/{versionedFile}";
         }
 
         private async Task EnsureManifest()
