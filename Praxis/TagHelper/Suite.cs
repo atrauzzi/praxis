@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Configuration;
 using Flurl.Http;
+using Microsoft.AspNetCore.Html;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Praxis.TagHelper
@@ -15,6 +17,10 @@ namespace Praxis.TagHelper
         private const string AssetPath = "lib";
 
         private static IDictionary<string, string> _manifest;
+
+        private static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings {
+            Error = null,
+        };
 
         private string StaticHost { get; }
 
@@ -31,14 +37,16 @@ namespace Praxis.TagHelper
         {
             await EnsureManifest();
 
-            var suiteName = context
+            var suiteName = (context
                 .AllAttributes
                 .FirstOrDefault(a => a.Name == "name")
-                .Value as string;
+                .Value as HtmlString)
+                .Value;
 
             output.TagName = "script";
+            output.Attributes.Clear();
             output.Attributes.Add("type", "text/javascript");
-            output.Attributes.Add("src", GetVersionedUri(suiteName, ".js"));
+            output.Attributes.Add("src", GetVersionedUri(suiteName, "js"));
             output.TagMode = TagMode.StartTagAndEndTag;
 
             output.PostElement.AppendHtml($@"<link rel=""stylesheet"" type=""text/css"" href=""{GetVersionedUri(suiteName, "css")}"" />");
@@ -46,8 +54,10 @@ namespace Praxis.TagHelper
 
         private string GetVersionedUri(string suiteName, string extension)
         {
-            var file = $"{AssetPrefix}/{suiteName}.{extension}";
-            var versionedFile = _manifest[file] ?? file;
+            var file = $"{suiteName}.{extension}";
+            var versionedFile = _manifest
+                .FirstOrDefault(info => info.Key == file)
+                .Value ?? file;
 
             return $"{AssetPrefix}/{versionedFile}";
         }
@@ -56,15 +66,25 @@ namespace Praxis.TagHelper
         {
             if (_manifest == null)
             {
-                var manifest = await ManifestUri
+                var manifestResponse = await ManifestUri
                     .AllowAnyHttpStatus()
-                    .GetStringAsync();
+                    .GetAsync();
 
-                _manifest = JObject.Parse(manifest)?
-                    .Properties()?
-                    .ToDictionary(
-                        p => p.Name,
-                        p => p.Value.Value<string>());
+                if (manifestResponse.IsSuccessStatusCode)
+                {
+                    var manifestJson = await manifestResponse.Content.ReadAsStringAsync();
+
+                    _manifest = JsonConvert
+                        .DeserializeObject<JObject>(manifestJson, JsonSettings)?
+                        .Properties()?
+                        .ToDictionary(
+                            p => p.Name,
+                            p => p.Value.Value<string>());
+                }
+                else
+                {
+                    _manifest = new Dictionary<string, string>();
+                }
             }
         }
     }
