@@ -38,7 +38,7 @@ namespace Praxis.TagHelper
 
             httpContext.Items.Add(suiteKey, null);
 
-            StaticHost = configuration.GetSection("StaticHost").Value;
+            StaticHost = configuration.GetSection("TrustedHosts:Static").Value;
         }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
