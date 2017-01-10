@@ -9,9 +9,11 @@ namespace Praxis.Extensions
         // ToDo: domain-tool
         public static T Merge<T>(this T target, T source)
         {
-            typeof(T)
+            target.GetType()
                 .GetProperties()
-                .Select(p => new KeyValuePair<PropertyInfo, object>(p, p.GetValue(source, null)))
+                .Where(p => p.CanWrite && p.CanRead)
+                .Select(p => 
+                    new KeyValuePair<PropertyInfo, object>(p, p.GetValue(source, null)))
                 .Where(p => p.Value != null)
                 .ToList()
                 .ForEach(p => p.Key
