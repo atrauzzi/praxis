@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Constraints;
 
@@ -95,13 +96,23 @@ namespace Praxis.Routing
                 };
 
             if (constraints == null)
+            {
                 constraints = new Dictionary<string, object>();
+            }
+
+            var methodConstraints = new HttpMethodRouteConstraint(HttpMethods.Options);
 
             if (httpMethod != null)
-                constraints.Add("httpMethod", new HttpMethodRouteConstraint(httpMethod));
+            {
+                methodConstraints.AllowedMethods.Add(httpMethod);
+            }
+
+            constraints.Add("httpMethod", methodConstraints);
 
             if (contentType != null)
+            {
                 constraints.Add("contentType", new HttpContentTypeConstraint(contentType));
+            }
 
             return routes.MapRoute(name, path, defaults, new RouteValueDictionary(constraints));
         }
