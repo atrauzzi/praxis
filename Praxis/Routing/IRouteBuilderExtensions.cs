@@ -100,9 +100,20 @@ namespace Praxis.Routing
                 constraints = new Dictionary<string, object>();
             }
 
-            var methodConstraints = new HttpMethodRouteConstraint(HttpMethods.Options);
+            var methodConstraints = new HttpMethodRouteConstraint(
+                HttpMethods.Options, 
+                HttpMethods.Head
+            );
 
-            if (httpMethod != null)
+            if (httpMethod == null)
+            {
+                methodConstraints.AllowedMethods.Add(HttpMethods.Get);
+                methodConstraints.AllowedMethods.Add(HttpMethods.Post);
+                methodConstraints.AllowedMethods.Add(HttpMethods.Patch);
+                methodConstraints.AllowedMethods.Add(HttpMethods.Delete);
+                methodConstraints.AllowedMethods.Add(HttpMethods.Put);
+            }
+            else
             {
                 methodConstraints.AllowedMethods.Add(httpMethod);
             }

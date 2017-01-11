@@ -14,7 +14,7 @@ namespace Praxis.Extensions
                 .Where(p => p.CanWrite && p.CanRead)
                 .Select(p => 
                     new KeyValuePair<PropertyInfo, object>(p, p.GetValue(source, null)))
-                .Where(p => p.Value != null)
+                .Where(tp => tp.Value != null)
                 .ToList()
                 .ForEach(p => p.Key
                     .SetValue(target, p.Value, null));
