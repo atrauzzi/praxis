@@ -8,13 +8,21 @@ namespace Praxis.Options
     //       To help in your templates, you can also optionally add `string` constants to your subclass representing 
     //       the various base filenames you expect to see in your manifest!  Yay strongly typed assets!
     //
-    // Note: This cannot be an interface because `IOptions` requires an instantiable class with a constructor.
+    // Note: This cannot be an interface or abstract because `IOptions` requires an instantiable class with a constructor.
     public class Manifest : Dictionary<string, Uri>
     {
-        public static Uri PathPrefix => new Uri("/");
+        public virtual string Name => "Default";
 
-        protected static string BaseAssetFilePath (string fileName) => new Uri(PathPrefix, fileName).ToString();
+        public virtual string Host => TrustedHosts.Static;
 
-        public Uri GetPathPrefix() => PathPrefix;
+        public virtual Uri PathPrefix => new Uri("/", UriKind.Relative);
+
+        public Uri BuildAssetUri(TrustedHosts trustedHosts, string assetName)
+        {
+            var baseUri = new Uri(trustedHosts[Host], PathPrefix);
+            var filePath = this[assetName];
+
+            return new Uri($"{baseUri}/{filePath}");
+        }
     }
 }

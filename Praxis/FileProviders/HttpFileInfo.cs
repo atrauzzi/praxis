@@ -27,6 +27,5 @@ namespace Praxis.FileProviders
 
             return request.Result;
         }
-
     }
 }

@@ -23,32 +23,35 @@ namespace Praxis.TagHelper
         public Css(
             IHttpContextAccessor httpContextAccessor, 
             IOptions<TrustedHosts> trustedHosts,
-            IEnumerable<IOptions<Manifest>> manifest
+            IEnumerable<Manifest> manifests
         )
         {
             _trustedHosts = trustedHosts.Value;
-            _manifests = manifest.Select(m => m.Value);
+            _manifests = manifests;
             _httpContext = httpContextAccessor.HttpContext;
         }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var asset = (context
+            var assetName = (context
                 .AllAttributes
                 .FirstOrDefault(a => a.Name == "name")
                 .Value as HtmlString)
                 .Value;
 
-            var host = (context
+            var manifestName = (context
                 .AllAttributes
-                .FirstOrDefault(a => a.Name == "host")
+                .FirstOrDefault(a => a.Name == "manifest")
                 .Value as HtmlString)?
                 .Value
                 ?? TrustedHosts.Static;
 
-            Nonce(asset);
+            Nonce(assetName);
 
-            var uri = BuildUri(asset, host);
+            var fileName = $"{assetName}.css";
+            var manifest = _manifests.First(m => 
+                m?.Name.Equals(manifestName) ?? false);
+            var uri = manifest.BuildAssetUri(_trustedHosts, fileName);
 
             output.TagName = "link";
             output.TagMode = TagMode.SelfClosing;
@@ -68,15 +71,6 @@ namespace Praxis.TagHelper
             }
 
             _httpContext.Items.Add(RootCssNonceKey, name);
-        }
-
-        private Uri BuildUri(string asset, string host)
-        {
-            
-            var baseUri = _trustedHosts[host];
-            var fileName = $"{asset}.css";
-            var filePath = _manifests[fileName];
-            return new Uri(baseUri, filePath);
         }
     }
 }

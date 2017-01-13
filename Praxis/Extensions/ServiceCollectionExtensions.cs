@@ -1,22 +1,26 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
+using Microsoft.Extensions.Options;
 
 namespace Praxis.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection ConfigurePraxis<T>(this IServiceCollection services, IConfiguration configuration)
-        where T : class
-        {
-            services.Configure<T>(configuration);
+        private static readonly IList<Type> _options = new List<Type>();
 
-            typeof(OptionsConfigurationServiceCollectionExtensions)
-                .GetMethods()
-                .First(m => m.IsGenericMethod && m.Name.Equals("Configure"))
-                .MakeGenericMethod(typeof(T).GetTypeInfo().BaseType)
-                .Invoke(null, new object[] { services, configuration });
+        public static IServiceCollection ConfigurePraxis<T1, T2>(this IServiceCollection services, IConfiguration configuration)
+        where T1 : class, new()
+        where T2 : class, T1, new()
+        {
+            _options.Add(typeof(IOptions<T2>));
+            services.Configure<T2>(configuration);
+
+            services.AddSingleton<IEnumerable<T1>>(provider => _options
+                .Select(t => 
+                    (provider.GetService(t) as IOptions<T2>)?.Value));
 
             return services;
         }

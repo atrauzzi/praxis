@@ -7,11 +7,9 @@ namespace Praxis.Options
     public class TrustedHosts : Dictionary<string, Uri>
     {
         public const string PublicSite = "PublicSite";
-        public const string Application = "Application";
         public const string Static = "Static";
 
         public Uri PublicSiteUri => this[PublicSite];
-        public Uri ApplicationUri => this[Application];
         public Uri StaticUri => this[Static];
     }
 }
