@@ -1,13 +1,16 @@
 {
-  "version": "1.0.6",
+  "version": "1.0.7",
   "copyright": "Apache-2.0",
   "title": "Praxis",
   "name": "Praxis",
-  "projectUrl": "http://github.com/atrauzzi/praxis",
   "language": "en-US",
   "authors": [
     "Alexander Trauzzi <atrauzzi@gmail.com>"
   ],
+
+  "packOptions": {
+    "projectUrl": "http://github.com/atrauzzi/praxis"
+  },
 
   "dependencies": {
     "Microsoft.AspNetCore.Authentication.Cookies": "1.1.0",
