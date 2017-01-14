@@ -14,4 +14,4 @@ script:
   - docker-compose run --rm praxis-cli dotnet build
 
 after_success:
-  - sh ./Praxis/publish.sh
+  - bash ./Praxis/publish.sh
