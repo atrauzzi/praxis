@@ -1,5 +1,5 @@
 {
-  "version": "1.0.7",
+  "version": "1.0.8",
   "copyright": "Apache-2.0",
   "title": "Praxis",
   "name": "Praxis",
@@ -9,7 +9,12 @@
   ],
 
   "packOptions": {
-    "projectUrl": "http://github.com/atrauzzi/praxis"
+    "projectUrl": "http://github.com/atrauzzi/praxis",
+    "repository": {
+      "type": "git",
+      "url": "http://github.com/atrauzzi/praxis",
+      "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0"
+    }
   },
 
   "dependencies": {
