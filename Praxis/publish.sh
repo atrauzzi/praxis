@@ -10,6 +10,8 @@ if [ "$BRANCH" == "master" ]; then
   else
     echo "This is a new release, yay!  Publishing nuget package."
 	PUSH_COMMAND="${PUSH_COMMAND_TEMPLATE/NUGET_API_KEY/$NUGET_API_KEY}"
+	rm -rf obj
+	rm -rf bin
 	$PACK_COMMAND
     $PUSH_COMMAND
   fi

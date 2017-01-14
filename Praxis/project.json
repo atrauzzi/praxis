@@ -1,5 +1,13 @@
 {
-  "version": "1.0.4",
+  "version": "1.0.5",
+  "copyright": "Apache-2.0",
+  "title": "Praxis",
+  "name": "Praxis",
+  "language": "en-US",
+  "authors": [
+    "Alexander Trauzzi <atrauzzi@gmail.com>"
+  ],
+
   "dependencies": {
     "Microsoft.AspNetCore.Authentication.Cookies": "1.1.0",
     "Microsoft.AspNetCore.Routing": "1.1.0",
