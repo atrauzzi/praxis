@@ -5,13 +5,13 @@ services:
 
 branches:
   only:
-  - master
+    - master
 
 install:
-  - docker-compose run --rm praxis-cli dotnet restore
+  - docker-compose build
 
 script:
-  - docker-compose run --rm praxis-cli dotnet build
+  - docker-compose run --rm praxis-cli bash ./build.sh
 
 after_success:
-  - bash ./Praxis/publish.sh
+  - docker-compose run --rm -e BRANCH=$TRAVIS_BRANCH praxis-cli bash ./publish.sh
