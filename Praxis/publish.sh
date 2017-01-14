@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PACK_COMMAND="docker-compose run --rm praxis-cli dotnet pack --configuration Release"
-PUSH_COMMAND_TEMPLATE="docker-compose run --rm praxis-cli mono /usr/local/bin/nuget push ./bin/Release/Praxis*.nupkg NUGET_API_KEY -Source nuget.org"
+PUSH_COMMAND_TEMPLATE="docker-compose run --rm praxis-cli mono /usr/local/bin/nuget push ./bin/Release/Praxis*.nupkg NUGET_API_KEY -Source https://www.nuget.org/api/v2/package"
 
 if [ "$TRAVIS_BRANCH" == "master" ]; then
 
