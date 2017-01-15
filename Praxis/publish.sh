@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PACK_COMMAND="dotnet pack --configuration Release"
-PUSH_COMMAND_TEMPLATE="mono /usr/local/bin/nuget push ./bin/Release/Praxis*.nupkg -ApiKey NUGET_API_KEY -Source https://www.nuget.org"
+PUSH_COMMAND_TEMPLATE="mono /usr/local/bin/nuget push ./bin/Release/Praxis*.nupkg -ApiKey NUGET_API_KEY -Source https://www.nuget.org -Verbosity detailed"
 	
 echo "(nuget API key is ${#NUGET_API_KEY} characters long)"
 
