@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Praxis.Options
 {
-    // Note: This cannot be an interface because `IOptions` requires an instantiable class with a constructor.
+    // Note: This cannot be an interface or abstract because `IOptions` requires an instantiable class with a constructor.
     public class TrustedHosts : Dictionary<string, Uri>
     {
         public const string PublicSite = "PublicSite";

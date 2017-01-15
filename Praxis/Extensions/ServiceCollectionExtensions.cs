@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Praxis.Options;
 
 namespace Praxis.Extensions
 {
@@ -24,5 +25,15 @@ namespace Praxis.Extensions
 
             return services;
         }
+
+        public static IServiceCollection ConfigureTrustedHosts<T1>(this IServiceCollection services, IConfiguration configuration)
+        where T1 : TrustedHosts, new()
+        {
+            services.Configure<T1>(configuration);
+            services.AddSingleton<IOptions<TrustedHosts>>(sp => sp.GetService<IOptions<T1>>());
+
+            return services;
+        }
+
     }
 }
