@@ -1,6 +1,4 @@
-﻿using System;
-using System.Text;
-using Microsoft.AspNetCore.DataProtection;
+﻿using Microsoft.AspNetCore.DataProtection;
 
 namespace Praxis.Security
 {

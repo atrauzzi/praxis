@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Text;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 
 namespace Praxis.DataProtection

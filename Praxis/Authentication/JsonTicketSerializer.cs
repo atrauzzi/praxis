@@ -1,21 +1,14 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http.Authentication;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Praxis.Authentication
 {
     public class JsonTicketSerializer : IDataSerializer<AuthenticationTicket>
     {
-        private readonly JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings
-        {
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-        };
-
         public byte[] Serialize(AuthenticationTicket ticket)
         {
             var ticketJson = new JObject();
