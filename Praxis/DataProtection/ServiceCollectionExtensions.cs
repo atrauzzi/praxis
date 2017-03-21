@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.DataProtection.Repositories;
