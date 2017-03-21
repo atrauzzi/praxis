@@ -4,6 +4,7 @@ services:
 
   praxis-cli:
     build: ./Praxis
+    privileged: true
     container_name: praxis-cli
 
     environment:
